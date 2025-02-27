@@ -42,6 +42,9 @@ var y = p1y;
 // Are we moving towards p2?
 var towards = true;
 
+var t = 0;
+var move;
+
 // Intilize the variables and  display by adding listeners to sliders
 document.getElementById("P1x").oninput = function() {
   p1x = this.value;
@@ -108,13 +111,37 @@ function onRender()
 
 function onUpdate(timestep)
 {
-	if(towards == true)
+	let originX = p1x;
+  let originY = p1y;
+  let targetX = p2x;
+  let targetY = p2y;
+
+  var distance = Math.sqrt(((targetX - x) ** 2) + ((targetY - y) ** 2));
+  var trueDistance = Math.sqrt((targetX ** 2) + (targetY ** 2));
+  move = speed / trueDistance;
+  t += move * timestep;
+
+  if (distance < 0) {
+    towards = false;
+    heading += 180;
+  }
+
+  x = (1 - t) * originX + t * targetX;
+  y = (1 - t) * originY + t * targetY;
+
+  if(towards == true)
 	{
-		
+    originX = p2x;
+    originY = p2y;
+    targetX = p1x;
+    targetY = p1y;
 	}
 	else
 	{
-	
+	  originX = p1x;
+    originY = p1y;
+    targetX = p2x;
+    targetY = p2y;
 	}
 }
 
