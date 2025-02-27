@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+<canvas id="canvas" width="800" height="600" style="border:1px solid#000000;">
+Your browser does not support the HTML canvas tag.
+</canvas>
+<div>
+    <p>
+        P1: <input type="range" min="0" max="400" value="40" id="P1x"><span id="P1xDisplay">40</span>
+        <input type="range" min="0" max="300" value="60" id="P1y"><span id="P1yDisplay">60</span>
+    </p>
+    <p>
+        P2: <input type="range" min="400" max="800" value="740" id="P2x"><span id="P2xDisplay">740</span>
+        <input type="range" min="300" max="600" value="550" id="P2y"><span id="P2yDisplay">550</span>
+    </p>
+
+ </div>
+
+<script>
+
+// Initialise variables
+
+// Point 1 x and y values
+var p1x = document.getElementById("P1x").value;
+var p1y = document.getElementById("P1y").value;
+// Point 2 x and y values
+var p2x = document.getElementById("P2x").value;
+var p2y = document.getElementById("P2y").value;
+
+
+// Radius of the point moving around
+var radius = 10;
+// Speed of the point moving around in pixels per second
+var speed = 100;
+// Heading
+var heading = Math.atan2(p2y - p1y, p2x - p1x);
+// Current position of the point moving around
+var x = p1x;
+var y = p1y;
+// Are we moving towards p2?
+var towards = true;
+
+// Intilize the variables and  display by adding listeners to sliders
+document.getElementById("P1x").oninput = function() {
+  p1x = this.value;
+  document.getElementById("P1xDisplay").innerText = "" + p1x;
+  reset();
+  onRender();
+}
+
+document.getElementById("P1y").oninput = function() {
+  p1y = this.value;
+  document.getElementById("P1yDisplay").innerText = "" + p1y;
+  reset();
+  onRender();
+}
+
+document.getElementById("P2x").oninput = function() {
+  p2x = this.value;
+  document.getElementById("P2xDisplay").innerText = "" + p2x;
+  reset();
+  onRender();
+}
+
+document.getElementById("P2y").oninput = function() {
+  p2y = this.value;
+  document.getElementById("P2yDisplay").innerText = "" + p2y;
+  reset();
+  onRender();
+}
+
+function reset()
+{
+	x = p1x;
+	y = p1y;
+	
+	towards = true;
+	
+	heading = Math.atan2(p2y - p1y, p2x - p1x);
+}
+
+function onRender()
+{
+    let canvas = document.getElementById("canvas");
+    let ctx = canvas.getContext("2d");
+ 
+    // Clear the canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw points
+    ctx.strokeStyle = "#B8860B";
+    ctx.beginPath();
+    ctx.arc(p1x, p1y, radius, 0, 2 * Math.PI);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(p2x, p2y, radius, 0, 2 * Math.PI);
+    ctx.stroke();
+
+    // Draw NPC
+    ctx.fillStyle = "#6495ED";
+    ctx.beginPath();
+    ctx.arc(x, y, radius / 2, 0, 2 * Math.PI);
+    ctx.fill();
+}
+
+function onUpdate(timestep)
+{
+	if(towards == true)
+	{
+		
+	}
+	else
+	{
+	
+	}
+}
+
+// Main gameLoop
+function gameLoop(timestamp) {
+    let timestep = timestamp - lastRender;
+    let seconds = timestep / 1000;
+    onUpdate(seconds); 
+    onRender();
+
+    lastRender = timestamp;
+    window.requestAnimationFrame(gameLoop);
+}
+
+var lastRender = 0;
+window.requestAnimationFrame(gameLoop);
+</script>
+
+</body>
+</html>
